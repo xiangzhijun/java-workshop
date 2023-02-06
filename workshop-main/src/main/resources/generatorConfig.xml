@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<!--mybatis mapper自动生成配置-->
+<generatorConfiguration>
+    <properties resource="application.properties"/>
+
+    <context id="Mysql" targetRuntime="MyBatis3Simple" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="tk.mybatis.mapper.generator.MapperPlugin">
+            <property name="mappers" value="${mybatis.generator.mapper.class}"/>
+            <property name="beginningDelimiter" value="`"/>
+            <property name="endingDelimiter" value="`"/>
+            <property name="lombok" value="Getter,Setter,ToString"/>
+        </plugin>
+
+        <jdbcConnection driverClass="${spring.datasource.driver-class-name}"
+                        connectionURL="${spring.datasource.url}"
+                        userId="${spring.datasource.username}"
+                        password="${spring.datasource.password}">
+        </jdbcConnection>
+        <!-- 非必需，类型处理器，在数据库类型和java类型之间的转换控制-->
+        <javaTypeResolver>
+            <property name="forceBigDecimals" value="false"/>
+            <property name="useJSR310Types" value="true"/>
+        </javaTypeResolver>
+
+        <!-- model类 package 及路径 -->
+        <javaModelGenerator targetPackage="${mybatis.generator.base.package}.model.entity"
+                            targetProject="src/main/java"/>
+
+        <!-- xml文件路径 -->
+        <sqlMapGenerator targetPackage="mappers" targetProject="src/main/resources"/>
+
+        <!-- mapper接口 package 及路径 -->
+        <javaClientGenerator targetPackage="${mybatis.generator.base.package}.mapper" targetProject="src/main/java"
+                             type="XMLMAPPER"/>
+
+
+        <!-- 关键：相关表的配置，生成具体哪个表的实体类，xml，mapper
+        tableName：数据库中的表名称    domainObjectName：生成实体类的名称-->
+        <table tableName="t_demo" domainObjectName="DataDemo">
+            <generatedKey column="id" sqlStatement="Mysql" identity="true"/>
+        </table>
+    </context>
+</generatorConfiguration>
